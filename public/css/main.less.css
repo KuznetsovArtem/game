@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+}
+
+#msg {
+    position: absolute;
+    border: 5px solid black;
+    left: 50px;
+    top: 200px;
+    display: none;
+}

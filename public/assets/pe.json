@@ -1,0 +1,114 @@
+{"frames": {
+    "p1.png": {
+        "frame": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "sourceSize": {
+            "w": 50,
+            "h": 50
+        }
+    },
+    "p2.png": {
+        "frame": {
+            "x": 50,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "sourceSize": {
+            "w": 50,
+            "h": 50
+        }
+    },
+    "p3.png": {
+        "frame": {
+            "x": 100,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "sourceSize": {
+            "w": 50,
+            "h": 50
+        }
+    },
+    "p4.png": {
+        "frame": {
+            "x": 150,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+        },
+        "sourceSize": {
+            "w": 50,
+            "h": 50
+        }
+    },
+    "e.png": {
+        "frame": {
+            "x": 0,
+            "y": 145,
+            "w": 50,
+            "h": 40
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 40
+        },
+        "sourceSize": {
+            "w": 50,
+            "h": 40
+        }
+    }
+},
+    "meta": {
+        "app": "game",
+        "version": "1.0",
+        "image": "pe.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 240,
+            "h": 384
+        },
+        "scale": 1
+    }
+}
