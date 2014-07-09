@@ -1,0 +1,94 @@
+{"frames": {
+    "grass.gif": {
+        "frame": {
+            "x": 0,
+            "y": 32,
+            "w": 32,
+            "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 32
+        },
+        "sourceSize": {
+            "w": 32,
+            "h": 32
+        }
+    },
+    "ground.gif": {
+        "frame": {
+            "x": 97,
+            "y": 32,
+            "w": 32,
+            "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 32
+        },
+        "sourceSize": {
+            "w": 32,
+            "h": 32
+        }
+    },
+    "water.gif": {
+        "frame": {
+            "x": 193,
+            "y": 32,
+            "w": 32,
+            "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 32
+        },
+        "sourceSize": {
+            "w": 32,
+            "h": 32
+        }
+    },
+    "wall.gif": {
+        "frame": {
+            "x": 128,
+            "y": 0,
+            "w": 32,
+            "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 32
+        },
+        "sourceSize": {
+            "w": 32,
+            "h": 32
+        }
+    }
+},
+    "meta": {
+        "app": "game",
+        "version": "1.0",
+        "image": "grounds.gif",
+        "format": "RGBA8888",
+        "size": {
+            "w": 288,
+            "h": 608
+        },
+        "scale": 1
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "game",
+  "version": "0.0.0",
+  "description": "pixi js test game",
+  "main": "server.js",
+  "moduleType": [
+    "node"
+  ],
+  "authors": [
+    "Artem Kuznetsov"
+  ],
+  "license": "MIT",
+  "homepage": "/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
