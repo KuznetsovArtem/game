@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json',]);
 //    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/player.json' ]);
-    var mapLoader = new PIXI.JsonLoader('/js/map.json');
+    var mapLoader = new PIXI.JsonLoader('/maps/map.json');
 
     /**
      * MAP
