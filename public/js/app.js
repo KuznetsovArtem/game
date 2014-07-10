@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     // init
-    var stage = new PIXI.Stage(0xCEFF99);
+    var stage = new PIXI.Stage(0xAABBCC);
 
     var mapObj = new PIXI.DisplayObjectContainer();
     window.map = mapObj;
@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function() {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, true);
     document.body.appendChild(renderer.view);
 
-    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json']);
+    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json',]);
+//    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/player.json' ]);
     var mapLoader = new PIXI.JsonLoader('/js/map.json');
 
     /**
@@ -82,19 +83,19 @@ document.addEventListener("DOMContentLoaded", function() {
         switch(direction) {
             case 'u':
                 obj.position.y -= ds * speed;
-                obj.rotation = -Math.PI;
+                obj.rotation = 0;
                 break;
             case 'd':
                 obj.position.y += ds * speed;
-                obj.rotation = 0;
+                obj.rotation = -Math.PI;
                 break;
             case 'l':
                 obj.position.x -= ds * speed;
-                obj.rotation = Math.PI / 2;
+                obj.rotation = -Math.PI / 2;
                 break;
             case 'r':
                 obj.position.x += ds * speed;
-                obj.rotation = -Math.PI / 2;
+                obj.rotation = Math.PI / 2;
                 break;
         }
     }
@@ -104,59 +105,44 @@ document.addEventListener("DOMContentLoaded", function() {
      **/
 
     function player( ) {
-        var bulletGraph = new PIXI.Graphics();
-        bulletGraph.beginFill(0x00FF00);
-        bulletGraph.moveTo(10, 20);
-        bulletGraph.lineTo(20, 10);
-        bulletGraph.lineTo(2, 10);
-        bulletGraph.lineTo(10, 20);
-        bulletGraph.lineStyle(1, 0x0000FF, 1);
-        bulletGraph.endFill();
+//        var bulletGraph = new PIXI.Graphics();
+//        bulletGraph.beginFill(0x00FF00);
+//        bulletGraph.moveTo(10, 20);
+//        bulletGraph.lineTo(20, 10);
+//        bulletGraph.lineTo(2, 10);
+//        bulletGraph.lineTo(10, 20);
+//        bulletGraph.lineStyle(1, 0x0000FF, 1);
+//        bulletGraph.endFill();
         //stage.addChild(bulletGraph)
-        var bullet;
+//        var bullet;
 
-        function shoot() {
-            sprite = new PIXI.Sprite(bulletGraph.generateTexture());
-
-            sprite.position.x = dummy.position.x;
-            sprite.position.y = dummy.position.y + 100;
-
-            sprite.anchor.x = 0.5;
-            sprite.anchor.y = 0.5;
-
-            sprite.radius = 40;
-
-            //each bullet has to follow the camera and rotate in the complete opposite direction
-            //sprite.rotation = -camera.rotation;
-            sprite.pivot.y = sprite.radius + 80;
-            return sprite
-        }
-
-        var dummyGraph = new PIXI.Graphics();
-        // TODO: rem graph
-        dummyGraph.beginFill(0xFF0000);
-        dummyGraph.lineStyle(1, 0x0000FF, 1);
-        dummyGraph.moveTo(0, 0);
-        dummyGraph.lineTo(20, 0);
-        dummyGraph.lineTo(10, 20);
-        dummyGraph.lineTo(0, 0);
-        dummyGraph.endFill();
-
-        dummyGraph.beginFill(0x00FF00);
-        dummyGraph.moveTo(10, 20);
-        dummyGraph.lineTo(20, 10);
-        dummyGraph.lineTo(2, 10);
-        dummyGraph.lineTo(10, 20);
-        dummyGraph.lineStyle(1, 0x0000FF, 1);
-        dummyGraph.endFill();
-//        var dummy = new PIXI.Sprite(dummyGraph.generateTexture());
+//        function shoot() {
+//            sprite = new PIXI.Sprite(bulletGraph.generateTexture());
+//
+//            sprite.position.x = dummy.position.x;
+//            sprite.position.y = dummy.position.y + 100;
+//
+//            sprite.anchor.x = 0.5;
+//            sprite.anchor.y = 0.5;
+//
+//            sprite.radius = 40;
+//
+//            //each bullet has to follow the camera and rotate in the complete opposite direction
+//            //sprite.rotation = -camera.rotation;
+//            sprite.pivot.y = sprite.radius + 80;
+//            return sprite
+//        }
 
         var dummyFrames = [];
 
-        dummyFrames.push(PIXI.Texture.fromFrame('p1.png'));
-        dummyFrames.push(PIXI.Texture.fromFrame('p2.png'));
-        dummyFrames.push(PIXI.Texture.fromFrame('p3.png'));
-        dummyFrames.push(PIXI.Texture.fromFrame('p4.png'));
+        for(var i = 0; i <= 10; i++) {
+            var val = i < 10 ? "0" + i : i;
+            dummyFrames.push(PIXI.Texture.fromFrame('goodboy_' + val + '.png'));
+        }
+//        dummyFrames.push(PIXI.Texture.fromFrame('goodboy_01.png'));
+//        dummyFrames.push(PIXI.Texture.fromFrame('p2.png'));
+//        dummyFrames.push(PIXI.Texture.fromFrame('p3.png'));
+//        dummyFrames.push(PIXI.Texture.fromFrame('p4.png'));
 
         var dummy = new PIXI.MovieClip(dummyFrames);
 
