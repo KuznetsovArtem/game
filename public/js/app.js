@@ -51,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
                 for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
-//                    x = i * map.tileW;
-//                    y = j * map.tileH;
                     drawTile = texturedTile(terrain[j][i]);
                     drawTile(x, y);
                 }
@@ -72,18 +70,30 @@ document.addEventListener("DOMContentLoaded", function() {
         var ds = 0.1;
         switch(direction) {
             case 'u':
+                if(obj.position.y <= 0) {
+                    break;
+                }
                 obj.position.y -= ds * speed;
                 obj.rotation = 0;
                 break;
             case 'd':
+                if(obj.position.y >= map.size.height) {
+                    break;
+                }
                 obj.position.y += ds * speed;
                 obj.rotation = -Math.PI;
                 break;
             case 'l':
+                if(obj.position.x <= 0) {
+                    break;
+                }
                 obj.position.x -= ds * speed;
                 obj.rotation = -Math.PI / 2;
                 break;
             case 'r':
+                if(obj.position.x >= map.size.width) {
+                    break;
+                }
                 obj.position.x += ds * speed;
                 obj.rotation = Math.PI / 2;
                 break;
@@ -92,17 +102,30 @@ document.addEventListener("DOMContentLoaded", function() {
     function moveMap(obj, direction, speed) {
         // TODO: now def speed is 0.1 + move to conf
         var ds = 0.1;
+        var offset = 50;
         switch(direction) {
             case 'u':
+                if(obj.position.y <= conf.H - map.size.height - offset) {
+                    break;
+                }
                 obj.position.y -= ds * speed;
                 break;
             case 'd':
+                if(obj.position.y >= 0  + offset) {
+                    break;
+                }
                 obj.position.y += ds * speed;
                 break;
             case 'l':
+                if(obj.position.x <= conf.W - map.size.width - offset) {
+                    break;
+                }
                 obj.position.x -= ds * speed;
                 break;
             case 'r':
+                if(obj.position.x >= 0  + offset) {
+                    break;
+                }
                 obj.position.x += ds * speed;
                 break;
         }
@@ -147,17 +170,12 @@ document.addEventListener("DOMContentLoaded", function() {
             var val = i < 10 ? "0" + i : i;
             dummyFrames.push(PIXI.Texture.fromFrame('goodboy_' + val + '.png'));
         }
-//        dummyFrames.push(PIXI.Texture.fromFrame('goodboy_01.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p2.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p3.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p4.png'));
 
         var dummy = new PIXI.MovieClip(dummyFrames);
         dummy.position.x = 15;
         dummy.position.y = 15;
         dummy.anchor.x = 0.5;
         dummy.anchor.y = 0.5;
-
 //        dummy.play();
         dummy.animationSpeed = 0.15;
         stage.addChild(dummy);
@@ -169,18 +187,24 @@ document.addEventListener("DOMContentLoaded", function() {
             moveUp: function () {
                 dummy.play();
                 move(dummy, 'u', playerSpeed);
+                moveMap(stage, 'd', playerSpeed / 2);
             },
             moveDown: function () {
                 dummy.play();
                 move(dummy, 'd', playerSpeed);
+                moveMap(stage, 'u', playerSpeed / 2);
             },
             moveLeft: function () {
                 dummy.play();
                 move(dummy, 'l', playerSpeed);
+//                moveMap(stage, 'r', 1 + conf.W / map.size.width);
+                moveMap(stage, 'r', playerSpeed / 2);
             },
             moveRight: function () {
                 dummy.play();
                 move(dummy, 'r', playerSpeed);
+                moveMap(stage, 'l', playerSpeed / 2);
+//                moveMap(stage, 'l', 1 + conf.W / map.size.width);
             }
         }
         var stageMove = {
@@ -199,10 +223,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
+        // map move
         kd.UP.down(stageMove.moveUp);
         kd.DOWN.down(stageMove.moveDown);
         kd.LEFT.down(stageMove.moveLeft);
         kd.RIGHT.down(stageMove.moveRight);
+        // player move
         kd.W.down(p.moveUp);
         kd.S.down(p.moveDown);
         kd.A.down(p.moveLeft);
@@ -307,6 +333,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     mapLoader.on("loaded", function(data) {
         map = data.content.json
+        map.size = {
+            width: map.tileW * map.terrain.length,
+            height: map.tileH * map.terrain[0].length
+        };
         loader.load();
     });
     mapLoader.on("error", function(err) {
