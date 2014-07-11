@@ -8,29 +8,27 @@ document.addEventListener("DOMContentLoaded", function() {
     // configs
     var conf = {
         W : 512,
-        H : 512
+        H : 512,
+        antialising: false
     };
 
     // init
-    var stage = new PIXI.Stage(0xAABBCC);
+    var camera = new PIXI.Stage(0xAABBCC);
 
-    var mapObj = new PIXI.DisplayObjectContainer();
-    window.map = mapObj;
+    var stage = new PIXI.DisplayObjectContainer();
+    // rem
+    window.mp = stage;
+    camera.addChild(stage)
 
-    stage.addChild(mapObj)
-
-
-    var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, true);
+    var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, conf.antialising);
     document.body.appendChild(renderer.view);
 
     var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json',]);
-//    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/player.json' ]);
-    var mapLoader = new PIXI.JsonLoader('/js/map.json');
+    var mapLoader = new PIXI.JsonLoader('/maps/L1.json');
 
     /**
      * MAP
      **/
-    var G = 0, D = 1, W = 2, L = 3, X = 4;
     var map;
 //+++++++++++++++++++++++++++++ TESTS
 
@@ -48,31 +46,21 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
-        // TODO: refactor: text call
-        var grass = texturedTile(0);
-        var dirt = texturedTile(1);
-        var water = texturedTile(2);
-        var wall = texturedTile(3);
-        var empty = function () {
-        };
-        var tileMethods = [grass, dirt, water, wall, empty];
-
         function drawTerrain(terrain) {
-            var tileType, x;
+            var x, y;
 
-            for (var i = 0; i < terrain.length; i++) {
-                for (var j = 0; j < terrain[i].length; j++) {
-                    x = j * map.tileW;
-                    y = i * map.tileH;
-                    drawTile = tileMethods[terrain[i][j]];
+            for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
+                for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
+                    drawTile = texturedTile(terrain[j][i]);
                     drawTile(x, y);
                 }
             }
+
+            drawDecor();
         }
         function drawDecor() {}
         function drawItems() {}
 
-//        drawSimpleMap()
         drawTerrain(map.terrain);
     }
 
@@ -82,20 +70,63 @@ document.addEventListener("DOMContentLoaded", function() {
         var ds = 0.1;
         switch(direction) {
             case 'u':
+                if(obj.position.y <= 0) {
+                    break;
+                }
                 obj.position.y -= ds * speed;
                 obj.rotation = 0;
                 break;
             case 'd':
+                if(obj.position.y >= map.size.height) {
+                    break;
+                }
                 obj.position.y += ds * speed;
                 obj.rotation = -Math.PI;
                 break;
             case 'l':
+                if(obj.position.x <= 0) {
+                    break;
+                }
                 obj.position.x -= ds * speed;
                 obj.rotation = -Math.PI / 2;
                 break;
             case 'r':
+                if(obj.position.x >= map.size.width) {
+                    break;
+                }
                 obj.position.x += ds * speed;
                 obj.rotation = Math.PI / 2;
+                break;
+        }
+    }
+    function moveMap(obj, direction, speed) {
+        // TODO: now def speed is 0.1 + move to conf
+        var ds = 0.1;
+        var offset = 50;
+        switch(direction) {
+            case 'u':
+                if(obj.position.y <= conf.H - map.size.height - offset) {
+                    break;
+                }
+                obj.position.y -= ds * speed;
+                break;
+            case 'd':
+                if(obj.position.y >= 0  + offset) {
+                    break;
+                }
+                obj.position.y += ds * speed;
+                break;
+            case 'l':
+                if(obj.position.x <= conf.W - map.size.width - offset) {
+                    break;
+                }
+                obj.position.x -= ds * speed;
+                break;
+            case 'r':
+                if(obj.position.x >= 0  + offset) {
+                    break;
+                }
+                obj.position.x += ds * speed;
                 break;
         }
     }
@@ -139,20 +170,12 @@ document.addEventListener("DOMContentLoaded", function() {
             var val = i < 10 ? "0" + i : i;
             dummyFrames.push(PIXI.Texture.fromFrame('goodboy_' + val + '.png'));
         }
-//        dummyFrames.push(PIXI.Texture.fromFrame('goodboy_01.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p2.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p3.png'));
-//        dummyFrames.push(PIXI.Texture.fromFrame('p4.png'));
 
         var dummy = new PIXI.MovieClip(dummyFrames);
-
-
-        //var dummy = PIXI.Sprite.fromFrame('p4.png');
         dummy.position.x = 15;
         dummy.position.y = 15;
         dummy.anchor.x = 0.5;
         dummy.anchor.y = 0.5;
-
 //        dummy.play();
         dummy.animationSpeed = 0.15;
         stage.addChild(dummy);
@@ -164,25 +187,48 @@ document.addEventListener("DOMContentLoaded", function() {
             moveUp: function () {
                 dummy.play();
                 move(dummy, 'u', playerSpeed);
+                moveMap(stage, 'd', playerSpeed / 2);
             },
             moveDown: function () {
                 dummy.play();
                 move(dummy, 'd', playerSpeed);
+                moveMap(stage, 'u', playerSpeed / 2);
             },
             moveLeft: function () {
                 dummy.play();
                 move(dummy, 'l', playerSpeed);
+//                moveMap(stage, 'r', 1 + conf.W / map.size.width);
+                moveMap(stage, 'r', playerSpeed / 2);
             },
             moveRight: function () {
                 dummy.play();
                 move(dummy, 'r', playerSpeed);
+                moveMap(stage, 'l', playerSpeed / 2);
+//                moveMap(stage, 'l', 1 + conf.W / map.size.width);
+            }
+        }
+        var stageMove = {
+            moveUp: function () {
+                console.log()
+                moveMap(stage, 'u', playerSpeed  * 3);
+            },
+            moveDown: function () {
+                moveMap(stage, 'd', playerSpeed  * 3);
+            },
+            moveLeft: function () {
+                moveMap(stage, 'l', playerSpeed  * 3);
+            },
+            moveRight: function () {
+                moveMap(stage, 'r', playerSpeed  * 3);
             }
         }
 
-        kd.UP.down(p.moveUp);
-        kd.DOWN.down(p.moveDown);
-        kd.LEFT.down(p.moveLeft);
-        kd.RIGHT.down(p.moveRight);
+        // map move
+        kd.UP.down(stageMove.moveUp);
+        kd.DOWN.down(stageMove.moveDown);
+        kd.LEFT.down(stageMove.moveLeft);
+        kd.RIGHT.down(stageMove.moveRight);
+        // player move
         kd.W.down(p.moveUp);
         kd.S.down(p.moveDown);
         kd.A.down(p.moveLeft);
@@ -217,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
             body.radius = 40;
             this.body = body;
 
-            stage.addChild(this.body);
+            camera.addChild(this.body);
         }
     }
 
@@ -277,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //        }
     }
 
-    stage.mousedown = function(e) {
+    camera.mousedown = function(e) {
 //        bullet = shoot();
 //        console.log("shoot", bullet);
 //        stage.addChild(bullet);
@@ -286,8 +332,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // Loading
 
     mapLoader.on("loaded", function(data) {
-//        console.log(data);
         map = data.content.json
+        map.size = {
+            width: map.tileW * map.terrain.length,
+            height: map.tileH * map.terrain[0].length
+        };
         loader.load();
     });
     mapLoader.on("error", function(err) {
@@ -300,20 +349,20 @@ document.addEventListener("DOMContentLoaded", function() {
     // start game
     function start() {
 
-        drawMap(mapObj);
+        drawMap(stage);
         var pl = player();
-        addEnemies();
+//        addEnemies();
 
         function animate() {
 
             kd.tick();
 //            pl.play();
-            enemiesLife(enemies);
-            easyCollision();
+//            enemiesLife(enemies);
+//            easyCollision();
 
             requestAnimFrame(animate);
 
-            renderer.render(stage);
+            renderer.render(camera);
             pl.stop();
         }
 
