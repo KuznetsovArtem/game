@@ -253,7 +253,6 @@ document.addEventListener("DOMContentLoaded", function() {
 //            var body = new PIXI.Sprite(graphic.generateTexture());
             var body = PIXI.Sprite.fromFrame('e.png');
 
-
             body.position.x = defs.x;
             body.position.y = defs.y;
 
@@ -263,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
             body.radius = 40;
             this.body = body;
 
-            camera.addChild(this.body);
+            stage.addChild(this.body);
         }
     }
 
@@ -333,6 +332,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     mapLoader.on("loaded", function(data) {
         map = data.content.json
+        // for map movement
         map.size = {
             width: map.tileW * map.terrain.length,
             height: map.tileH * map.terrain[0].length
@@ -351,13 +351,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         drawMap(stage);
         var pl = player();
-//        addEnemies();
+        addEnemies();
 
         function animate() {
 
             kd.tick();
 //            pl.play();
-//            enemiesLife(enemies);
+            enemiesLife(enemies);
 //            easyCollision();
 
             requestAnimFrame(animate);
