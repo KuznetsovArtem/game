@@ -23,23 +23,29 @@ document.addEventListener("DOMContentLoaded", function() {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, conf.antialising);
     document.body.appendChild(renderer.view);
 
-    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json',]);
+    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json']);
     var mapLoader = new PIXI.JsonLoader('/maps/L1.json');
 
     /**
      * MAP
      **/
     var map;
-//+++++++++++++++++++++++++++++ TESTS
-
-
-//++++++++++++++++++++++++++++++++++++ END OF TESTS
     function drawMap(stage) {
 
         function texturedTile(id) {
             var texture = map.textures[id];
             return function (x, y) {
                 var tile = PIXI.Sprite.fromFrame(texture);
+                tile.position.x = x;
+                tile.position.y = y;
+                stage.addChild(tile);
+            }
+        }
+        // TODO: rem when from assets
+        function desTile(tetxture) {
+            var img = tetxture;
+            return function (x, y) {
+                var tile = PIXI.Sprite.fromImage(img);
                 tile.position.x = x;
                 tile.position.y = y;
                 stage.addChild(tile);
@@ -56,9 +62,20 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            drawDecor();
+            //drawDecor(map.decor);
         }
-        function drawDecor() {}
+
+        function drawDecor(terrain) {
+            var x, y;
+
+            for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
+                for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
+                    if(terrain[j][i]) continue;
+                    drawTile = desTile(terrain[j][i]);
+                    drawTile(x, y);
+                }
+            }
+        }
         function drawItems() {}
 
         drawTerrain(map.terrain);
@@ -350,6 +367,16 @@ document.addEventListener("DOMContentLoaded", function() {
     function start() {
 
         drawMap(stage);
+//+++++++++++++++++++++++++++++ TESTS
+        var ttile = PIXI.Sprite.fromImage('/assets/ruinbuild1.png');
+        ttile.position.x = 300;
+        ttile.position.y = 300;
+        stage.addChild(ttile);
+        var ttile2 = PIXI.Sprite.fromImage('/assets/ruinbuildfloor.png');
+        ttile2.position.x = 170;
+        ttile2.position.y = 300;
+        stage.addChild(ttile2);
+//++++++++++++++++++++++++++++++++++++ END OF TESTS
         var pl = player();
         addEnemies();
 
