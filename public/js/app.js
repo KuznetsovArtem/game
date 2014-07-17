@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.body.appendChild(renderer.view);
 
     var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json']);
-    var mapLoader = new PIXI.JsonLoader('/maps/L1.json');
+    var mapLoader = new PIXI.JsonLoader('/maps/L2.json');
 
     /**
      * MAP
@@ -114,6 +114,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
     }
+
+    function moveAlpha(obj, direction, speed) {
+        // TODO: now def speed is 0.1 + move to conf
+        var ds = 0.1 * speed;
+        obj.position.x += Math.cos(direction) * ds
+        obj.position.y += Math.sin(direction) * ds
+        // TODO: only legs rotation
+        // obj.rotation = Math.PI / 2;
+    }
     function moveMap(obj, direction, speed) {
         // TODO: now def speed is 0.1 + move to conf
         var ds = 0.1;
@@ -145,11 +154,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
     }
+
+
     /**
      * Player
      * TODO: player and enemy cat use a.generateTexture() from gr
      **/
-
     function player( ) {
 //        var bulletGraph = new PIXI.Graphics();
 //        bulletGraph.beginFill(0x00FF00);
@@ -201,23 +211,27 @@ document.addEventListener("DOMContentLoaded", function() {
         var p = {
             moveUp: function () {
                 dummy.play();
-                move(dummy, 'u', playerSpeed);
+//                move(dummy, 'u', playerSpeed);
+                moveAlpha(dummy, -Math.PI/2, playerSpeed);
                 moveMap(stage, 'd', playerSpeed / 2);
             },
             moveDown: function () {
                 dummy.play();
-                move(dummy, 'd', playerSpeed);
+//                move(dummy, 'd', playerSpeed);
+                moveAlpha(dummy, Math.PI/2, playerSpeed);
                 moveMap(stage, 'u', playerSpeed / 2);
             },
             moveLeft: function () {
                 dummy.play();
-                move(dummy, 'l', playerSpeed);
+//                move(dummy, 'l', playerSpeed);
+                moveAlpha(dummy, Math.PI, playerSpeed);
 //                moveMap(stage, 'r', 1 + conf.W / map.size.width);
                 moveMap(stage, 'r', playerSpeed / 2);
             },
             moveRight: function () {
                 dummy.play();
-                move(dummy, 'r', playerSpeed);
+//                move(dummy, 'r', playerSpeed);
+                moveAlpha(dummy, Math.PI/3, playerSpeed);
                 moveMap(stage, 'l', playerSpeed / 2);
 //                moveMap(stage, 'l', 1 + conf.W / map.size.width);
             }
