@@ -8,6 +8,10 @@ app.get('/', function(req, res){
     res.sendfile('public/index.html');
 });
 
+app.get('/editor', function(req, res) {
+    res.sendfile('map_editor/editor.html');
+});
+
 app.get('/map/:name?', function(req, res) {
 
     var editorDir = 'map_editor/maps/';
