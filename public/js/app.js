@@ -23,23 +23,28 @@ document.addEventListener("DOMContentLoaded", function() {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, conf.antialising);
     document.body.appendChild(renderer.view);
 
-    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json',]);
-    var mapLoader = new PIXI.JsonLoader('/maps/L1.json');
+    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json']);
+    var mapLoader = new PIXI.JsonLoader('/maps/L2.json');
 
     /**
      * MAP
      **/
     var map;
-//+++++++++++++++++++++++++++++ TESTS
-
-
-//++++++++++++++++++++++++++++++++++++ END OF TESTS
     function drawMap(stage) {
 
         function texturedTile(id) {
             var texture = map.textures[id];
             return function (x, y) {
                 var tile = PIXI.Sprite.fromFrame(texture);
+                tile.position.x = x;
+                tile.position.y = y;
+                stage.addChild(tile);
+            }
+        }
+        // TODO: rem when from assets
+        function desTile(id) {
+            return function (x, y) {
+                var tile = PIXI.Sprite.fromImage(map.textures[id]);
                 tile.position.x = x;
                 tile.position.y = y;
                 stage.addChild(tile);
@@ -56,9 +61,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            drawDecor();
+            drawDecor(map.decor);
         }
-        function drawDecor() {}
+
+        function drawDecor(terrain) {
+            var x, y;
+
+            for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
+                for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
+                    if(terrain[j][i] === 0) continue;
+                    desTile(terrain[j][i])(x, y);
+                }
+            }
+        }
         function drawItems() {}
 
         drawTerrain(map.terrain);
@@ -99,6 +114,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
     }
+
+    function moveAlpha(obj, direction, speed) {
+        // TODO: now def speed is 0.1 + move to conf
+        var ds = 0.1 * speed;
+        obj.position.x += Math.cos(direction) * ds
+        obj.position.y += Math.sin(direction) * ds
+        // TODO: only legs rotation
+        // obj.rotation = Math.PI / 2;
+    }
     function moveMap(obj, direction, speed) {
         // TODO: now def speed is 0.1 + move to conf
         var ds = 0.1;
@@ -130,11 +154,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
     }
+
+
     /**
      * Player
      * TODO: player and enemy cat use a.generateTexture() from gr
      **/
-
     function player( ) {
 //        var bulletGraph = new PIXI.Graphics();
 //        bulletGraph.beginFill(0x00FF00);
@@ -186,23 +211,27 @@ document.addEventListener("DOMContentLoaded", function() {
         var p = {
             moveUp: function () {
                 dummy.play();
-                move(dummy, 'u', playerSpeed);
+//                move(dummy, 'u', playerSpeed);
+                moveAlpha(dummy, -Math.PI/2, playerSpeed);
                 moveMap(stage, 'd', playerSpeed / 2);
             },
             moveDown: function () {
                 dummy.play();
-                move(dummy, 'd', playerSpeed);
+//                move(dummy, 'd', playerSpeed);
+                moveAlpha(dummy, Math.PI/2, playerSpeed);
                 moveMap(stage, 'u', playerSpeed / 2);
             },
             moveLeft: function () {
                 dummy.play();
-                move(dummy, 'l', playerSpeed);
+//                move(dummy, 'l', playerSpeed);
+                moveAlpha(dummy, Math.PI, playerSpeed);
 //                moveMap(stage, 'r', 1 + conf.W / map.size.width);
                 moveMap(stage, 'r', playerSpeed / 2);
             },
             moveRight: function () {
                 dummy.play();
-                move(dummy, 'r', playerSpeed);
+//                move(dummy, 'r', playerSpeed);
+                moveAlpha(dummy, Math.PI/3, playerSpeed);
                 moveMap(stage, 'l', playerSpeed / 2);
 //                moveMap(stage, 'l', 1 + conf.W / map.size.width);
             }
@@ -253,7 +282,6 @@ document.addEventListener("DOMContentLoaded", function() {
 //            var body = new PIXI.Sprite(graphic.generateTexture());
             var body = PIXI.Sprite.fromFrame('e.png');
 
-
             body.position.x = defs.x;
             body.position.y = defs.y;
 
@@ -263,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function() {
             body.radius = 40;
             this.body = body;
 
-            camera.addChild(this.body);
+            stage.addChild(this.body);
         }
     }
 
@@ -333,6 +361,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     mapLoader.on("loaded", function(data) {
         map = data.content.json
+        // for map movement
         map.size = {
             width: map.tileW * map.terrain.length,
             height: map.tileH * map.terrain[0].length
@@ -350,14 +379,17 @@ document.addEventListener("DOMContentLoaded", function() {
     function start() {
 
         drawMap(stage);
+//+++++++++++++++++++++++++++++ TESTS
+
+//++++++++++++++++++++++++++++++++++++ END OF TESTS
         var pl = player();
-//        addEnemies();
+        addEnemies();
 
         function animate() {
 
             kd.tick();
 //            pl.play();
-//            enemiesLife(enemies);
+            enemiesLife(enemies);
 //            easyCollision();
 
             requestAnimFrame(animate);
