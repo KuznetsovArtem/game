@@ -1,0 +1,99 @@
+<!--Tiles-->
+<div class="panel-group" id="tiles-folders">
+    {% for name, folder in local.tiles %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#tiles-folders" href="#folder-{{ loop.key }}">
+                    {{ loop.key + "[" + name + "]" }}
+                </a>
+            </h4>
+        </div>
+        <div id="folder-{{ loop.key }}" class="panel-collapse collapse "><!-- in -->
+            <div class="panel-body">
+                {% for tile in folder %}
+                <img src="{{local.tilesDir + name + '/' + tile}}" class="img-thumbnail" height="32" width="32" alt=""/>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!--controls-->
+<!-- Standard button -->
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#new-map-conf">New</button>
+<button type="button" class="btn btn-default">Load</button>
+<button type="button" class="btn btn-default">Save</button>
+
+<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+<!--<button type="button" class="btn btn-primary">Primary</button>-->
+
+<!--&lt;!&ndash; Indicates a successful or positive action &ndash;&gt;-->
+<!--<button type="button" class="btn btn-success">Success</button>-->
+
+<!--&lt;!&ndash; Contextual button for informational alert messages &ndash;&gt;-->
+<!--<button type="button" class="btn btn-info">Info</button>-->
+
+<!--&lt;!&ndash; Indicates caution should be taken with this action &ndash;&gt;-->
+<!--<button type="button" class="btn btn-warning">Warning</button>-->
+
+<!--&lt;!&ndash; Indicates a dangerous or potentially negative action &ndash;&gt;-->
+<!--<button type="button" class="btn btn-danger">Danger</button>-->
+
+<!--&lt;!&ndash; Deemphasize a button by making it look like a link while maintaining button behavior &ndash;&gt;-->
+<!--<button type="button" class="btn btn-link">Link</button>-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="new-map-conf" tabindex="-1" role="dialog" aria-labelledby="new-map-confLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="map-name" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="map-name" placeholder="map name">
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Width</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="w-size">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Height</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputPassword3" placeholder="h-size">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Load persets
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,10 +16,29 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-10">[MAP]</div>
-        <div class="col-lg-2">[ELEMENTS]</div>
+        <div class="col-lg-10">
+            <div class="h4">{{ local.header }}</div>
+            <div id="map-editor">
+
+            </div>
+        </div>
+
+        <div class="col-lg-2">
+            <div class="h4">{{ local.column }}</div>
+            <pre class="pre-scrollable">
+                {{ local.tiles|json }}
+            </pre>
+
+            {% include "controlls.html" %}
+
+        </div>
     </div>
 </div>
 
+<script src="js/components/jquery/dist/jquery.min.js"></script>
+<script src="js/components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/js/components/pixi.js/bin/pixi.dev.js"></script>
+<script src="/js/components/keydrown/dist/keydrown.js"></script>
+<script src="/editor/editor.js"></script>
 </body>
 </html>
