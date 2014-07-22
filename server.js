@@ -1,11 +1,61 @@
 var config = require('./config');
-var express = require('express');
 var fs = require('fs');
+var express = require('express');
+var cons = require('consolidate');
 
 var app = express();
 
 app.get('/', function(req, res){
     res.sendfile('public/index.html');
+});
+
+app.get('/editor', function(req, res) {
+
+    /**
+     * Returns array of dirs
+     * @param parentDir
+     * @returns {*}
+     */
+    function getDirectories(parentDir) {
+        return fs.readdirSync(parentDir).filter(function (file) {
+            return fs.statSync(parentDir + file).isDirectory();
+        });
+    }
+
+    /**
+     * returns obj w/ dirs as key and img mames in arrey as val
+     * @param dirs Array
+     */
+    function getAllTiles(dirs, parent) {
+        var tiles = {};
+        for(var i = 0; i < dirs.length; i++) {
+            var curDir = parent + dirs[i] + '/';
+            tiles[dirs[i]] = fs.readdirSync(curDir).filter(function (file) {
+                return fs.statSync(curDir + file).isFile()
+            });
+        }
+
+        return tiles;
+    }
+
+    var tilesDir = __dirname + '/public/editor/tiles/';
+    var dirs = getDirectories(tilesDir);
+    var tiles = getAllTiles(dirs, tilesDir);
+
+//    var tiles = {
+//        level1 : [1,2,3,4],
+//        level2 : [1,2,3,4,5,6,7]
+//    }
+
+    var locals = {
+        header: '[MAP-block]',
+        column: '[ELEMENTS-block]',
+        tilesDir: 'editor/tiles/',
+        tiles: tiles
+    }
+    res.render('editor', {
+        local: locals
+    });
 });
 
 app.get('/map/:name?', function(req, res) {
@@ -39,7 +89,15 @@ app.get('/map/:name?', function(req, res) {
     res.send('saved');
 })
 
+
 app.use(express.static(__dirname + '/public'));
+app.engine('html', cons.swig);
+app.set('view engine', 'html');
+app.set('views', __dirname + '/map_editor');
+// TODO: Move to dev config
+app.set('view cache', false);
+// To disable Swig's cache, do the following:
+// cons.swig.setDefaults({ cache: false }); FIX: https://github.com/backflip/consolidate.js/blob/master/lib/consolidate.js#L247
 
 var server = app.listen(config.appPort, function() {
     console.log('Listening on port %d', server.address().port);
