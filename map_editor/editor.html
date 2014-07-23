@@ -8,26 +8,32 @@
     <meta name="author" content="">
 
     <title>Map editor</title>
-    <link rel="stylesheet" href="js/components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/js/components/bootstrap/dist/css/bootstrap.css"/>
 
-    <link href="css/editor.css" rel="stylesheet"> <!-- TODO -->
+    <link href="/css/editor.css" rel="stylesheet"> <!-- TODO -->
 </head>
 <body>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-10">
-            <div class="h4">{{ local.header }}</div>
-            <div id="map-editor">
 
-            </div>
+            <div class="h4">{{ local.header }}</div>
+            <div id="map-editor"></div>
+
         </div>
 
         <div class="col-lg-2">
+
             <div class="h4">{{ local.column }}</div>
             <pre class="pre-scrollable">
                 {{ local.tiles|json }}
             </pre>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Sprite sheet</div>
+                <div id="sprite-sheet" class="panel-body"></div>
+            </div>
 
             {% include "controlls.html" %}
 
@@ -35,8 +41,8 @@
     </div>
 </div>
 
-<script src="js/components/jquery/dist/jquery.min.js"></script>
-<script src="js/components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/js/components/jquery/dist/jquery.min.js"></script>
+<script src="/js/components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="/js/components/pixi.js/bin/pixi.dev.js"></script>
 <script src="/js/components/keydrown/dist/keydrown.js"></script>
 <script src="/editor/editor.js"></script>
