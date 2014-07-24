@@ -12,7 +12,9 @@
         <div id="folder-{{ loop.key }}" class="panel-collapse collapse "><!-- in -->
             <div class="panel-body">
                 {% for tile in folder %}
-                <img src="{{'/' + local.tilesDir + name + '/' + tile}}" class="img-thumbnail" height="32" width="32" alt=""/>
+                <!--TODO: return normal img src-->
+                <img src="{{'/' + local.tilesDir + name + '/' + tile}}" class="img-thumbnail"
+                     onclick=brush.set("{{ '/' + local.tilesDir + name + '/' + tile }}"); height="32" width="32" alt=""/>
                 {% endfor %}
             </div>
         </div>
@@ -25,25 +27,6 @@
 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#new-map-conf">New</button>
 <button type="button" class="btn btn-default">Load</button>
 <button type="button" class="btn btn-default" onclick="saveMap();">Save</button>
-
-<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-<!--<button type="button" class="btn btn-primary">Primary</button>-->
-
-<!--&lt;!&ndash; Indicates a successful or positive action &ndash;&gt;-->
-<!--<button type="button" class="btn btn-success">Success</button>-->
-
-<!--&lt;!&ndash; Contextual button for informational alert messages &ndash;&gt;-->
-<!--<button type="button" class="btn btn-info">Info</button>-->
-
-<!--&lt;!&ndash; Indicates caution should be taken with this action &ndash;&gt;-->
-<!--<button type="button" class="btn btn-warning">Warning</button>-->
-
-<!--&lt;!&ndash; Indicates a dangerous or potentially negative action &ndash;&gt;-->
-<!--<button type="button" class="btn btn-danger">Danger</button>-->
-
-<!--&lt;!&ndash; Deemphasize a button by making it look like a link while maintaining button behavior &ndash;&gt;-->
-<!--<button type="button" class="btn btn-link">Link</button>-->
-
 
 <!-- Modal -->
 <div class="modal fade" id="new-map-conf" tabindex="-1" role="dialog" aria-labelledby="new-map-confLabel" aria-hidden="true">
