@@ -26,15 +26,21 @@
         <div class="col-lg-2">
 
             <div class="h4">{{ local.column }}</div>
-            <pre class="pre-scrollable">
-                {{ local.tiles|json }}
-            </pre>
 
             <div class="panel panel-default">
                 <div class="panel-heading">Map controlls</div>
                 <div class="panel-body">
                     <button type="button" class="btn btn-info" onclick="mapFx.zoom().in();">Zoom in</button>
                     <button type="button" class="btn btn-info" onclick="mapFx.zoom().out();">Zoom out</button>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Brush controlls</div>
+                <div class="panel-body">
+                    <button type="button" class="btn btn-info" onclick="mapFx.zoom().in();">rot left</button>
+                    <button type="button" class="btn btn-info" onclick="mapFx.zoom().out();">rot right</button>
+                    <button type="button" class="btn btn-default" onclick="mapFx.zoom().out();">use</button>
                 </div>
             </div>
 

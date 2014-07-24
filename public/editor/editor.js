@@ -32,7 +32,7 @@ var constuct =  function(map) {
     mapFx.drawGrid(map.terrain.length, map.terrain[0].length, map, mapTerrainLayer);
 
 /* // Tile test
-   var texture = PIXI.Texture.fromImage("/editor/tiles/etst/t1.png");
+    var texture = PIXI.Texture.fromImage("/editor/tiles/etst/t1.png");
     // create a new Sprite using the texture
     var tile = new PIXI.Sprite(texture);
     // center the sprites anchor point
@@ -56,6 +56,9 @@ var constuct =  function(map) {
     }
     mapStage.addChild(tile);
 */
+
+    // init brush
+    brush.init(spriteStage);
 
     requestAnimFrame(animate);
 
@@ -213,14 +216,89 @@ function saveMap() {
 
 
 var brush = (function() {
-    var current;
+    var canvas, currentBrush, frames,
+        textures = [];
+
+    function addSprite(imgUrl, position) {
+        var tile = new PIXI.Sprite(PIXI.Texture.fromImage(imgUrl));
+        tile.position.x = position; // TODO: set/calculate position
+        tile.position.y = 0;
+        canvas.addChild(tile);
+    }
+
+    function generateFrameFile() {
+
+        var frame = {
+            "filename" : {
+                frame: {
+                    x: 0,
+                    y: 0,
+                    w: 0,
+                    h: 0
+                },
+                rotated: false,
+                trimmed: true,
+                "spriteSourceSize": {
+                    "x": 3,
+                    "y": 4,
+                    "w": 169,
+                    "h": 226
+                },
+                "sourceSize": {
+                    "w": 175,
+                    "h": 240
+                }
+            }
+        }
+
+        frames = {
+            frames: {}, // TODO: save pics
+            meta : {
+                app: "game",
+                version: "0.1",
+                image : '', // [mapname].png
+                format: "RGBA8888",
+                size : { // TODO: sheet canvas size
+                    w : 190,
+                    h : 190
+                },
+                scale: 1
+            }
+        }
+//        {"frames": {
+//
+//            "rollSequence0000.png":
+//            {
+//                "frame": {"x":483,"y":692,"w":169,"h":226},
+//                "rotated": false,
+//                "trimmed": true,
+//                "spriteSourceSize": {"x":3,"y":4,"w":169,"h":226},
+//                "sourceSize": {"w":175,"h":240}
+//            },
+//            "meta": {
+//                "app": "http://www.texturepacker.com",
+//                    "version": "1.0",
+//                    "image": "fighter.png",
+//                    "format": "RGBA8888",
+//                    "size": {"w":1024,"h":1024},
+//                "scale": "1",
+//                "smartupdate": "$TexturePacker:SmartUpdate:2f213a6b451f9f5719773418dfe80ae8$"
+//            }
+//        }
+    }
+
     return {
+        init : function(canv) {
+            canvas = canv;
+        },
         set : function(pic) {
             current = pic;
+            textures.push(pic);
+            addSprite(pic, textures.length * 32);
             console.log('brush set to: ' + current);
         },
         get : function() {
-            return current;
+            return currentBrush;
         }
     }
 })();
