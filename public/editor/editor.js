@@ -9,7 +9,15 @@ var constuct =  function(map) {
     var conf = {
         W: 800,
         H: 800,
-        antialising: false
+        antialising: false,
+        sMap : {
+            W: 160,
+            H: 160,
+            tile: {
+                W: 32,
+                H: 32
+            }
+        }
     };
     // Map and spriteSheet
     var mapStage = new PIXI.Stage('', true); // interactive
@@ -18,7 +26,7 @@ var constuct =  function(map) {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, true);
     document.getElementById('map-editor').appendChild(renderer.view);
 
-    var sheetRenderer = PIXI.autoDetectRenderer(160, 160, null, true);
+    var sheetRenderer = PIXI.autoDetectRenderer(conf.sMap.W, conf.sMap.W, null, true);
     document.getElementById('sprite-sheet').appendChild(sheetRenderer.view);
 
     // Terrain itit
@@ -58,7 +66,7 @@ var constuct =  function(map) {
 */
 
     // init brush
-    brush.init(spriteStage);
+    brush.init(spriteStage, conf.sMap);
 
     requestAnimFrame(animate);
 
@@ -71,7 +79,6 @@ var constuct =  function(map) {
 
     mapObject = map;
 }
-
 
 /**
  *
@@ -214,10 +221,10 @@ function saveMap() {
 
 }
 
-
 var brush = (function() {
     var canvas, currentBrush, frames,
-        textures = [];
+        textures = [],
+        usedSprites = [];
 
     function addSprite(imgUrl, position) {
         var tile = new PIXI.Sprite(PIXI.Texture.fromImage(imgUrl));
@@ -288,14 +295,28 @@ var brush = (function() {
     }
 
     return {
-        init : function(canv) {
+        init : function(canv, canvConfig) {
             canvas = canv;
+            var sizeX = canvConfig.W / canvConfig.tile.W;
+            var sizeY = canvConfig.H / canvConfig.tile.H;
+            for(var i = 0; i < sizeX; i++) {
+                usedSprites[i] = [];
+                for(var j = 0; j < sizeY; j++) {
+                    usedSprites[i][j] = ''
+                }
+            }
+            console.log(usedSprites);
         },
         set : function(pic) {
             current = pic;
             textures.push(pic);
             addSprite(pic, textures.length * 32);
             console.log('brush set to: ' + current);
+
+            // add to all arrays
+            size = frames.length;
+            var i =  Math.floor(size)
+            var j = size % usedSprites.length;
         },
         get : function() {
             return currentBrush;
