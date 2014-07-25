@@ -21,7 +21,7 @@ var constuct =  function(map) {
     };
     // Map and spriteSheet
     var mapStage = new PIXI.Stage('', true); // interactive
-    var spriteStage = new PIXI.Stage('');
+    var spriteStage = new PIXI.Stage('', true);
 
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, true);
     document.getElementById('map-editor').appendChild(renderer.view);
@@ -254,14 +254,27 @@ function saveMap() {
 }
 
 var brush = (function() {
-    var canvas, currentBrush, frames,
+    var canvas, config, currentBrush,
+        frames = {},
         textures = [],
         usedSprites = [];
 
     function addSprite(imgUrl, position) {
         var tile = new PIXI.Sprite(PIXI.Texture.fromImage(imgUrl));
-        tile.position.x = position; // TODO: set/calculate position
-        tile.position.y = 0;
+
+        console.log(textures.length, Math.floor(textures.length / config.sizeX) * config.tile.W, textures.length % config.sizeX * config.tile.H)
+
+        tile.position.x = Math.floor(textures.length / config.sizeX) * config.tile.W;
+        tile.position.y = textures.length % config.sizeX * config.tile.H||0;
+
+        tile.interactive = true;
+        tile.mousedown = function(e) {
+            console.log(e, this);
+        }
+
+        frames[imgUrl] = 'use' // TODO: set coords
+        textures.push(imgUrl); // TODO
+
         canvas.addChild(tile);
     }
 
@@ -329,26 +342,23 @@ var brush = (function() {
     return {
         init : function(canv, canvConfig) {
             canvas = canv;
-            var sizeX = canvConfig.W / canvConfig.tile.W;
-            var sizeY = canvConfig.H / canvConfig.tile.H;
-            for(var i = 0; i < sizeX; i++) {
+            config = canvConfig;
+            config.sizeX = canvConfig.W / canvConfig.tile.W;
+            config.sizeY = canvConfig.H / canvConfig.tile.H;
+            for(var i = 0; i < config.sizeX; i++) {
                 usedSprites[i] = [];
-                for(var j = 0; j < sizeY; j++) {
+                for(var j = 0; j < config.sizeY; j++) {
                     usedSprites[i][j] = ''
                 }
             }
-            console.log(usedSprites);
+            //console.log(usedSprites);
         },
         set : function(pic) {
-            current = pic;
-            textures.push(pic);
-            addSprite(pic, textures.length * 32);
-            console.log('brush set to: ' + current);
-
-            // add to all arrays
-            size = frames.length;
-            var i =  Math.floor(size)
-            var j = size % usedSprites.length;
+            currentBrush = pic;
+            if(!frames[pic] ) {
+                addSprite(pic);
+            }
+//            console.log('brush set to: ' + current);
         },
         get : function() {
             return currentBrush;
