@@ -65,6 +65,37 @@ var constuct =  function(map) {
     mapStage.addChild(tile);
 */
 
+    /**
+     * map keybord movement
+     */
+    function moveMap(obj, direction) {
+        // TODO: now def speed is 0.1 + move to conf
+        var offset = 50;
+        var speed = 2;
+        obj.position.x += Math.cos(direction) * speed;
+        obj.position.y += Math.sin(direction) * speed;
+    }
+
+    var stageMove = {
+        moveUp: function () {
+            moveMap(mapTerrainLayer, -1 * Math.PI / 2);
+        },
+        moveDown: function () {
+            moveMap(mapTerrainLayer, Math.PI / 2);
+        },
+        moveLeft: function () {
+            moveMap(mapTerrainLayer, -1 * Math.PI);
+        },
+        moveRight: function () {
+            moveMap(mapTerrainLayer, 2 * Math.PI);
+        }
+    }
+    // map move
+    kd.UP.down(stageMove.moveUp);
+    kd.DOWN.down(stageMove.moveDown);
+    kd.LEFT.down(stageMove.moveLeft);
+    kd.RIGHT.down(stageMove.moveRight);
+
     // init brush
     brush.init(spriteStage, conf.sMap);
 
@@ -73,6 +104,7 @@ var constuct =  function(map) {
     function animate() {
         requestAnimFrame(animate);
 
+        kd.tick();
         renderer.render(mapStage);
         sheetRenderer.render(spriteStage);
     }
@@ -180,13 +212,13 @@ var mapFx = (function() {
 /**
  *
  */
-function createMap() {
+function createMap(p) {
     var size = {
-        x: parseInt($('#map-width').val()),
-        y: parseInt($('#map-height').val())
+        x: p.x||parseInt($('#map-width').val()),
+        y: p.y||parseInt($('#map-height').val())
     }
     var map = {
-        "name": $('#map-name').val(),
+        "name": p.name||$('#map-name').val(),
         "version": "0.0.1",
         "tileH": 32,
         "tileW": 32,
@@ -323,3 +355,11 @@ var brush = (function() {
         }
     }
 })();
+
+
+// for testing purposes
+createMap({
+    name: 'test_map',
+    x: 20,
+    y: 20
+})
