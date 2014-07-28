@@ -4,7 +4,7 @@
 process.on("message", function(data) {
     console.log('Child ' + process.argv[2], data);
     process.send({
-        bla: 'bla'
+        child: 'ok'
     })
     process.disconnect();
 });

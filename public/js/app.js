@@ -23,8 +23,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, conf.antialising);
     document.body.appendChild(renderer.view);
 
-    var loader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json']);
+    var assetLoader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json', '/assets/SpriteSheet.json']);
     var mapLoader = new PIXI.JsonLoader('/maps/L2.json');
+
+    //explosion test
+    var explosions = [];
+    var count = 0;
 
     /**
      * MAP
@@ -366,13 +370,13 @@ document.addEventListener("DOMContentLoaded", function() {
             width: map.tileW * map.terrain.length,
             height: map.tileH * map.terrain[0].length
         };
-        loader.load();
+        assetLoader.load();
     });
     mapLoader.on("error", function(err) {
         console.warn('map: ', err)
     });
     mapLoader.load();
-    loader.onComplete = start;
+    assetLoader.onComplete = start;
 
 
     // start game
@@ -384,6 +388,26 @@ document.addEventListener("DOMContentLoaded", function() {
 //++++++++++++++++++++++++++++++++++++ END OF TESTS
         var pl = player();
         addEnemies();
+
+
+        // explosion test
+        var explosionTextures = [];
+        for (var i=1; i <= 26; i++)   {
+            var texture = PIXI.Texture.fromFrame("Explosion_Sequence_A " + i + ".png");
+            explosionTextures.push(texture);
+        };
+
+        for (var i = 0; i < 50; i++) {
+            var explosion = new PIXI.MovieClip(explosionTextures);
+            explosion.position.x = Math.random() * map.tileW * map.terrain.length;
+            explosion.position.y = Math.random() * map.tileH * map.terrain[0].length;
+            explosion.anchor.x = 0.5;
+            explosion.anchor.y = 0.5;
+            explosion.rotation = Math.random() * Math.PI;
+            explosion.scale.x = explosion.scale.y = 0.75 + Math.random() * 0.5;
+            explosion.gotoAndPlay(Math.random() * 27);
+            stage.addChild(explosion);
+        }
 
         function animate() {
 
@@ -408,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //
 //var assetsToLoader = [ "SpriteSheet.json"];
-//// create a new loader
+// create a new loader
 //loader = new PIXI.AssetLoader(assetsToLoader);
 //// use callback
 //loader.onComplete = onAssetsLoaded

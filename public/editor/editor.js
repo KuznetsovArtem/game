@@ -118,9 +118,10 @@ var constuct =  function(map) {
 var mapFx = (function() {
     fx = {
         makeSquere: function(map) {
-            graphic = new PIXI.Graphics();
+            var graphic = new PIXI.Graphics();
             graphic.lineStyle(1, 0xfafafa);
-            graphic.drawRect(0, 0, map.tileW -10, map.tileH -10);
+            graphic.drawRect(0, 0, map.tileW, map.tileH);
+            graphic.boundsPadding = 0;
             return graphic;
         },
         zoomLayer: ''
@@ -175,6 +176,7 @@ var mapFx = (function() {
             return layer;
         },
         drawGrid: function(mapWidth, mapHeight, map, mapLayer) {
+
             var terrain = [];
             for(var i = 0; i < mapWidth; i++) {
                 terrain[i] = [];
