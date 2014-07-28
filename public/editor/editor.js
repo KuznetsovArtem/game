@@ -186,13 +186,15 @@ var mapFx = (function() {
                     sprite.anchor.y = 0;
                     sprite.interactive = true
                     sprite.mousedown = function(e) {
-                        console.log(this, "clicked on sprite", e);
+//                        console.log(this, "clicked on sprite", e);
+                        brush.editTile(this.self.index);
 //                        console.log("clicked on sprite", e);
                         var brushTexture = brush.get()||"/editor/tiles/etst/t1.png"
                         this.texture = PIXI.Texture.fromImage(brushTexture);
                     }
                     sprite.mouseover = function(e) {
                         if(e.originalEvent.ctrlKey) {
+                            brush.editTile(this.self.index);
                             var brushTexture = brush.get()||"/editor/tiles/etst/t1.png"
                             this.texture = PIXI.Texture.fromImage(brushTexture);
                             console.log("drawing..");
@@ -202,9 +204,6 @@ var mapFx = (function() {
                 }
             }
             //
-        },
-        editTile : function(map, x, y) {
-
         }
     }
 })();
@@ -213,6 +212,7 @@ var mapFx = (function() {
  *
  */
 function createMap(p) {
+    p = p||{}
     var size = {
         x: p.x||parseInt($('#map-width').val()),
         y: p.y||parseInt($('#map-height').val())
@@ -236,8 +236,7 @@ function saveMap() {
 
     var data = {
         map: mapObject,
-        frames : mapFrames.getFrames(),
-        textures: '' // TODO;
+        frames : mapFrames.getFrames()
     }
 
     $.ajax({
@@ -256,21 +255,23 @@ function saveMap() {
 
 var brush = (function() {
     var canvas, config, currentBrush,
-        textures = [],
-        usedSprites = [];
+        textures = [];
 
     function addSprite(imgUrl) {
+        // create tile for spriteMap
         var tile = new PIXI.Sprite(PIXI.Texture.fromImage(imgUrl));
         tile.position.x = textures.length % config.sizeX * config.tile.H||0;
         tile.position.y = Math.floor(textures.length / config.sizeX) * config.tile.W;
-
         tile.interactive = true;
+        // TODO: select brush from spriteMap
         tile.mousedown = function(e) {
             console.log(e, this);
         }
 
-        textures.push(imgUrl); // TODO
-        mapFrames.add(imgUrl, {
+        var name = imgUrl.split('/');
+        name = name[name.length - 1];
+        textures.push(name);
+        mapFrames.add(name, {
             x: tile.position.x,
             y: tile.position.y
         });
@@ -283,23 +284,24 @@ var brush = (function() {
             config = canvConfig;
             config.sizeX = canvConfig.W / canvConfig.tile.W;
             config.sizeY = canvConfig.H / canvConfig.tile.H;
-            for(var i = 0; i < config.sizeX; i++) {
-                usedSprites[i] = [];
-                for(var j = 0; j < config.sizeY; j++) {
-                    usedSprites[i][j] = ''
-                }
-            }
-            //console.log(usedSprites);
         },
         set : function(pic) {
             currentBrush = pic;
             if(!frames[pic] ) {
                 addSprite(pic);
             }
-//            console.log('brush set to: ' + current);
         },
         get : function() {
             return currentBrush;
+        },
+        getTextures : function() {
+            return textures;
+        },
+        editTile : function(pos) {
+            var name = currentBrush.split('/');
+            name = name[name.length - 1];
+            mapObject.terrain[pos.x][pos.y] = textures.indexOf(name);
+            console.log('SET TO: '+ textures.indexOf(name));
         }
     }
 })();
@@ -326,9 +328,7 @@ var mapFrames = (function() {
     }
 
     return {
-        add : function(imgUrl, position) {
-            var name = imgUrl.split('/');
-            name = name[name.length - 1];
+        add : function(name, position) {
             frames[name] = {
                 frame : {
                     x: position.x,
@@ -356,8 +356,8 @@ var mapFrames = (function() {
 
 
 // for testing purposes
-createMap({
-    name: 'test_map',
-    x: 20,
-    y: 20
-})
+//createMap({
+//    name: 'test_map',
+//    x: 20,
+//    y: 20
+//})

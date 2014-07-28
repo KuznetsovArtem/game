@@ -23,8 +23,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, false, conf.antialising);
     document.body.appendChild(renderer.view);
 
-    var assetLoader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/pe.json', '/assets/player.json', '/assets/SpriteSheet.json']);
-    var mapLoader = new PIXI.JsonLoader('/maps/L2.json');
+    var assetLoader = new PIXI.AssetLoader(['/assets/grounds.json', '/assets/editor_map.json', '/assets/pe.json', '/assets/player.json', '/assets/SpriteSheet.json']);
+//    var mapLoader = new PIXI.JsonLoader('/maps/L2.json');
+    var mapLoader = new PIXI.JsonLoader('/maps/editor_map.json');
 
     //explosion test
     var explosions = [];
@@ -406,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function() {
             explosion.rotation = Math.random() * Math.PI;
             explosion.scale.x = explosion.scale.y = 0.75 + Math.random() * 0.5;
             explosion.gotoAndPlay(Math.random() * 27);
-            stage.addChild(explosion);
+//            stage.addChild(explosion);
         }
 
         function animate() {

@@ -1,0 +1,95 @@
+{
+    "frames": {
+        "t6.png": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t2.png": {
+            "frame": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t9.png": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t8.png": {
+            "frame": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        }
+    },
+    "meta": {
+        "app": "game",
+        "version": "0.1",
+        "image": "editor_map.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 190,
+            "h": 190
+        },
+        "scale": 1
+    }
+}

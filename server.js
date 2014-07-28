@@ -88,9 +88,8 @@ app.get('/editor', function(req, res) {
 app.post('/map/:name?', function(req, res) {
 
     var editorDir = 'map_editor/maps/';
-
     var map = req.body.map;
-
+    var frames = req.body.frames;
     var fileName = req.param('name')||'l2.json';
 
     if(fs.existsSync(editorDir + fileName)) {
@@ -103,11 +102,18 @@ app.post('/map/:name?', function(req, res) {
         })
     }
 
-    fs.writeFile(editorDir + fileName, JSON.stringify(map, null, 4), function(err) {
+    fs.writeFile(editorDir + fileName + '.json', JSON.stringify(map, null, 4), function(err) {
         if(err) {
             console.log(err)
         } else {
             console.log("map saved to " + editorDir + fileName);
+        }
+    })
+    fs.writeFile(editorDir + fileName + 'TextureMap.json', JSON.stringify(frames, null, 4), function(err) {
+        if(err) {
+            console.log(err)
+        } else {
+            console.log("texture spriteSheet saved to " + editorDir + fileName);
         }
     })
     res.send('saved');
