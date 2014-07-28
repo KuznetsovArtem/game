@@ -142,11 +142,6 @@ var mapFx = (function() {
     }
 
     return {
-        test: function() {
-            var sp1 = new MapTerSprite({x: 2, y:4});
-            var sp2 = new MapTerSprite({x: 25, y:14});
-            console.log(sp1, sp1.getIndex(), sp2, sp2.getIndex());
-        },
         zoom : function(obj) {
             var layer = fx.zoomLayer;
             if(obj) {
@@ -176,7 +171,6 @@ var mapFx = (function() {
             return layer;
         },
         drawGrid: function(mapWidth, mapHeight, map, mapLayer) {
-
             var terrain = [];
             for(var i = 0; i < mapWidth; i++) {
                 terrain[i] = [];
@@ -193,6 +187,7 @@ var mapFx = (function() {
                     sprite.interactive = true
                     sprite.mousedown = function(e) {
                         console.log(this, "clicked on sprite", e);
+//                        console.log("clicked on sprite", e);
                         var brushTexture = brush.get()||"/editor/tiles/etst/t1.png"
                         this.texture = PIXI.Texture.fromImage(brushTexture);
                     }
@@ -207,6 +202,9 @@ var mapFx = (function() {
                 }
             }
             //
+        },
+        editTile : function(map, x, y) {
+
         }
     }
 })();
@@ -238,6 +236,7 @@ function saveMap() {
 
     var data = {
         map: mapObject,
+        frames : mapFrames.getFrames(),
         textures: '' // TODO;
     }
 
@@ -257,88 +256,25 @@ function saveMap() {
 
 var brush = (function() {
     var canvas, config, currentBrush,
-        frames = {},
         textures = [],
         usedSprites = [];
 
-    function addSprite(imgUrl, position) {
+    function addSprite(imgUrl) {
         var tile = new PIXI.Sprite(PIXI.Texture.fromImage(imgUrl));
-
-        console.log(textures.length, Math.floor(textures.length / config.sizeX) * config.tile.W, textures.length % config.sizeX * config.tile.H)
-
-        tile.position.x = Math.floor(textures.length / config.sizeX) * config.tile.W;
-        tile.position.y = textures.length % config.sizeX * config.tile.H||0;
+        tile.position.x = textures.length % config.sizeX * config.tile.H||0;
+        tile.position.y = Math.floor(textures.length / config.sizeX) * config.tile.W;
 
         tile.interactive = true;
         tile.mousedown = function(e) {
             console.log(e, this);
         }
 
-        frames[imgUrl] = 'use' // TODO: set coords
         textures.push(imgUrl); // TODO
-
+        mapFrames.add(imgUrl, {
+            x: tile.position.x,
+            y: tile.position.y
+        });
         canvas.addChild(tile);
-    }
-
-    function generateFrameFile() {
-
-        var frame = {
-            "filename" : {
-                frame: {
-                    x: 0,
-                    y: 0,
-                    w: 0,
-                    h: 0
-                },
-                rotated: false,
-                trimmed: true,
-                "spriteSourceSize": {
-                    "x": 3,
-                    "y": 4,
-                    "w": 169,
-                    "h": 226
-                },
-                "sourceSize": {
-                    "w": 175,
-                    "h": 240
-                }
-            }
-        }
-
-        frames = {
-            frames: {}, // TODO: save pics
-            meta : {
-                app: "game",
-                version: "0.1",
-                image : '', // [mapname].png
-                format: "RGBA8888",
-                size : { // TODO: sheet canvas size
-                    w : 190,
-                    h : 190
-                },
-                scale: 1
-            }
-        }
-//        {"frames": {
-//
-//            "rollSequence0000.png":
-//            {
-//                "frame": {"x":483,"y":692,"w":169,"h":226},
-//                "rotated": false,
-//                "trimmed": true,
-//                "spriteSourceSize": {"x":3,"y":4,"w":169,"h":226},
-//                "sourceSize": {"w":175,"h":240}
-//            },
-//            "meta": {
-//                "app": "http://www.texturepacker.com",
-//                    "version": "1.0",
-//                    "image": "fighter.png",
-//                    "format": "RGBA8888",
-//                    "size": {"w":1024,"h":1024},
-//                "scale": "1",
-//                "smartupdate": "$TexturePacker:SmartUpdate:2f213a6b451f9f5719773418dfe80ae8$"
-//            }
-//        }
     }
 
     return {
@@ -367,6 +303,56 @@ var brush = (function() {
         }
     }
 })();
+
+var mapFrames = (function() {
+    var frames = {};
+
+    function generateFrameFile() {
+        var framesJson = {
+            frames: frames,
+            meta : {
+                app: "game",
+                version: "0.1",
+                image : '', // [mapname].png
+                format: "RGBA8888",
+                size : { // TODO: sheet canvas size
+                    w : 190,
+                    h : 190
+                },
+                scale: 1
+            }
+        }
+        return framesJson
+    }
+
+    return {
+        add : function(imgUrl, position) {
+            var name = imgUrl.split('/');
+            name = name[name.length - 1];
+            frames[name] = {
+                frame : {
+                    x: position.x,
+                    y: position.y,
+                    w: 32, // TODO: get from map config
+                    h: 32 // TODO: get from map config
+                },
+                rotated: false,
+                trimmed: true,
+                "spriteSourceSize": {
+                    x: position.x,
+                    y: position.y,
+                    w: 32, // TODO: get from map config
+                    h: 32 // TODO: get from map config
+                },
+                "sourceSize": {
+                    "w": 160, // TODO: get from map config
+                    "h": 160 // TODO: get from map config
+                }
+            }
+        },
+        getFrames: generateFrameFile
+    }
+})()
 
 
 // for testing purposes
