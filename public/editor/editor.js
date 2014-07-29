@@ -234,6 +234,10 @@ function createMap(p) {
 function saveMap() {
     console.log('try to save');
 
+    mapObject.textures = brush.getTextures();
+
+    return console.log(mapObject);
+
     var data = {
         map: mapObject,
         frames : mapFrames.getFrames()
@@ -295,7 +299,11 @@ var brush = (function() {
             return currentBrush;
         },
         getTextures : function() {
-            return textures;
+            var texturesObj = {};
+            for(var i in textures) {
+                texturesObj[i] = textures[i];
+            }
+            return texturesObj;
         },
         editTile : function(pos) {
             var name = currentBrush.split('/');

@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
                 for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
-                    drawTile = texturedTile(terrain[j][i]);
+                    drawTile = texturedTile(terrain[i][j]);
                     drawTile(x, y);
                 }
             }
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             for (var i = 0, x = 0; i < terrain.length; i++, x +=  map.tileW) {
                 for (var j = 0, y = 0; j < terrain[i].length; j++, y += map.tileH) {
-                    if(terrain[j][i] === 0) continue;
+                    if(terrain[i][j] === 0) continue;
                     desTile(terrain[j][i])(x, y);
                 }
             }
@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
             moveRight: function () {
                 dummy.play();
 //                move(dummy, 'r', playerSpeed);
-                moveAlpha(dummy, Math.PI/3, playerSpeed);
+                moveAlpha(dummy, 2 * Math.PI, playerSpeed);
                 moveMap(stage, 'l', playerSpeed / 2);
 //                moveMap(stage, 'l', 1 + conf.W / map.size.width);
             }
