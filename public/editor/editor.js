@@ -236,7 +236,7 @@ function saveMap() {
 
     mapObject.textures = brush.getTextures();
 
-    return console.log(mapObject);
+//    return console.log(mapObject);
 
     var data = {
         map: mapObject,
