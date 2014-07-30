@@ -1,0 +1,14 @@
+{
+    "frames": {},
+    "meta": {
+        "app": "game",
+        "version": "0.1",
+        "image": "",
+        "format": "RGBA8888",
+        "size": {
+            "w": 190,
+            "h": 190
+        },
+        "scale": 1
+    }
+}

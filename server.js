@@ -89,6 +89,24 @@ app.get('/editor', function(req, res) {
     });
 });
 
+app.post('/map/load/:name?', function(req, res) {
+    var mapName = req.param('name');
+
+    var sheets = fs.readFileSync(config.editor.savedSheetsDir + mapName, 'utf8');
+
+    fs.readFile(config.editor.savedMapsDir + mapName, 'utf8', function(err, mapData) {
+        if (err) throw err;
+        res.send({
+            map: JSON.parse(mapData),
+            sheet: JSON.parse(sheets)
+        })
+    })
+
+//    res.send({
+//        name: mapName
+//    })
+});
+
 app.post('/map/:name?', function(req, res) {
 
     var map = req.body.map;

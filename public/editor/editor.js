@@ -231,6 +231,33 @@ function createMap(p) {
     constuct(map);
 }
 
+/**
+ * Loads selected map's json from server
+ * @param map String
+ */
+function loadMap(map) {
+    $.ajax({
+        url: '/map/load/' + map,
+        type: 'POST',
+//        data: JSON.stringify(data),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            console.log(data);
+        }
+    })
+
+    createMap({
+        name: 'test_map',
+        x: 20,
+        y: 20
+    })
+}
+
+/**
+ * Sends map jsones to server
+ */
 function saveMap() {
     console.log('try to save');
 
@@ -251,7 +278,7 @@ function saveMap() {
         dataType: 'json',
         async: false,
         success: function(msg) {
-            console.log(data);
+            console.log(msg);
         }
     })
 

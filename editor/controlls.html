@@ -25,10 +25,10 @@
 <!--controls-->
 <!-- Standard button -->
 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#new-map-conf">New</button>
-<button type="button" class="btn btn-default">Load</button>
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#load-map">Load</button>
 <button type="button" class="btn btn-default" onclick="saveMap();">Save</button>
 
-<!-- Modal -->
+<!-- Modal new map // TODO: merge all modals to one -->
 <div class="modal fade" id="new-map-conf" tabindex="-1" role="dialog" aria-labelledby="new-map-confLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -76,6 +76,32 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createMap();">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!--Modal - load maps-->
+<div class="modal fade" id="load-map" tabindex="-1" role="dialog" aria-labelledby="load-mapLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+
+                <pre>
+                    {{ local.savedMaps | json }}
+                </pre>
+
+                {% for map in local.savedMaps %}
+                <button type="button" class="btn btn-default" onclick="loadMap('{{map}}')" data-dismiss="modal">{{ map.split(".")[0] }}</button>
+                {% endfor %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="loadMap();">Load</button>
             </div>
         </div>
     </div>
