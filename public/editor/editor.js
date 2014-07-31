@@ -1,37 +1,37 @@
 /**
  * Created by askuznetsov on 7/22/2014.
  */
-var mapObject, mapCanvas, sheetCanvas; // TODO change appendChild for cnavases
+var mapObject;
+
+// configs
+var conf = {
+    W: 800,
+    H: 800,
+    antialising: false,
+    sMap : {
+        W: 160,
+        H: 160,
+        tile: {
+            W: 32,
+            H: 32
+        }
+    },
+    control : {
+        mapMoveSpeed: 2.5
+    }
+};
+
 
 var constuct =  function(map, load) {
-
-    // configs
-    var conf = {
-        W: 800,
-        H: 800,
-        antialising: false,
-        sMap : {
-            W: 160,
-            H: 160,
-            tile: {
-                W: 32,
-                H: 32
-            }
-        },
-        control : {
-            mapMoveSpeed: 2.5
-        }
-
-    };
     // Map and spriteSheet
     var mapStage = new PIXI.Stage('', true); // interactive
     var spriteStage = new PIXI.Stage('', true);
 
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, true);
-    (mapCanvas||document.getElementById('map-editor')).appendChild(renderer.view);
+    document.getElementById('map-editor').appendChild(renderer.view);
 
     var sheetRenderer = PIXI.autoDetectRenderer(conf.sMap.W, conf.sMap.W, null, true);
-    (sheetCanvas||document.getElementById('sprite-sheet')).appendChild(sheetRenderer.view);
+    document.getElementById('sprite-sheet').appendChild(sheetRenderer.view);
 
     // Terrain itit
     var mapTerrainLayer = new PIXI.DisplayObjectContainer();
@@ -236,7 +236,7 @@ function saveMap() {
     mapObject.textures = brush.getTextures();
     var saveConfig = { // TODO: real urls for imgs
         name: mapObject.name,
-        test : [1,2,3,4,5,6,7,8,9]
+        urls : brush.getImgUrls()
     }
 
     var data = {
@@ -261,7 +261,8 @@ function saveMap() {
 
 var brush = (function() {
     var canvas, config, currentBrush,
-        textures = [];
+        textures = [],
+        texturesUrls = {};
 
     function addSprite(imgUrl) {
         // create tile for spriteMap
@@ -276,7 +277,10 @@ var brush = (function() {
 
         var name = imgUrl.split('/');
         name = name[name.length - 1];
+        // save for map textrures obj
         textures.push(name);
+        texturesUrls[name] = imgUrl;
+        // add curren texture to sprite sheet
         mapFrames.add(name, {
             x: tile.position.x,
             y: tile.position.y
@@ -307,11 +311,13 @@ var brush = (function() {
             }
             return texturesObj;
         },
+        getImgUrls : function() {
+            return texturesUrls;
+        },
         editTile : function(pos) {
             var name = currentBrush.split('/');
             name = name[name.length - 1];
             mapObject.terrain[pos.x][pos.y] = textures.indexOf(name);
-            console.log('SET TO: '+ textures.indexOf(name));
         }
     }
 })();
@@ -325,11 +331,11 @@ var mapFrames = (function() {
             meta : {
                 app: "game",
                 version: "0.1",
-                image : '', // [mapname].png
+                image : mapObject.name + '.png',
                 format: "RGBA8888",
-                size : { // TODO: sheet canvas size
-                    w : 190,
-                    h : 190
+                size : {
+                    w : conf.sMap.W,
+                    h : conf.sMap.H
                 },
                 scale: 1
             }
@@ -343,30 +349,23 @@ var mapFrames = (function() {
                 frame : {
                     x: position.x,
                     y: position.y,
-                    w: 32, // TODO: get from map config
-                    h: 32 // TODO: get from map config
+                    w: conf.sMap.tile.W,
+                    h: conf.sMap.tile.H
                 },
                 rotated: false,
                 trimmed: true,
                 "spriteSourceSize": {
                     x: position.x,
                     y: position.y,
-                    w: 32, // TODO: get from map config
-                    h: 32 // TODO: get from map config
+                    w: conf.sMap.tile.W,
+                    h: conf.sMap.tile.H
                 },
                 "sourceSize": {
-                    "w": 160, // TODO: get from map config
-                    "h": 160 // TODO: get from map config
+                    "w": conf.sMap.W,
+                    "h": conf.sMap.H
                 }
             }
         },
         getFrames: generateFrameFile
     }
-})()
-
-// for testing purposes
-//createMap({
-//    name: 'test_map',
-//    x: 20,
-//    y: 20
-//})
+})();
