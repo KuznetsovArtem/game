@@ -21,6 +21,7 @@ var conf = {
     }
 };
 
+var editorEvent = new Event("savemap");
 
 var constuct =  function(map, load) {
     // Map and spriteSheet
@@ -84,10 +85,32 @@ var constuct =  function(map, load) {
         requestAnimFrame(animate);
     }
 
+    // fxes
     mapObject = map;
     if(load && typeof load === 'function') {
         load();
     }
+
+    document.addEventListener("savemap", function(e) {
+        console.log("event", e)
+        sheetRenderer.render(spriteStage);
+        var spriteSheetImg = sheetRenderer.view.toDataURL();
+
+        $.ajax({
+            url: '/map/saveimage/' + mapObject.name,
+            type: 'POST',
+            data: {
+                img : sheetRenderer.view.toDataURL("image/png")
+            },
+//            contentType: 'image/png; charset=utf-8',
+//            dataType: 'json',
+            async: true,
+            success: function(msg) {
+                console.log(msg);
+                console.log(sheetRenderer.view.toDataURL("image/png"));
+            }
+        });
+    }, false);
 }
 
 /**
@@ -239,6 +262,8 @@ function saveMap() {
         urls : brush.getImgUrls()
     }
 
+    document.dispatchEvent(editorEvent);
+    return ;
     var data = {
         map: mapObject,
         frames : mapFrames.getFrames(),
@@ -246,7 +271,7 @@ function saveMap() {
     }
 
     $.ajax({
-        url: '/map/' + mapObject.name,
+        url: '/map/save/' + mapObject.name,
         type: 'POST',
         data: JSON.stringify(data),
         contentType: 'application/json; charset=utf-8',

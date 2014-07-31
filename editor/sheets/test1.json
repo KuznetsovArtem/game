@@ -59,12 +59,92 @@
                 "w": 160,
                 "h": 160
             }
+        },
+        "t7.png": {
+            "frame": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t2.png": {
+            "frame": {
+                "x": 128,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 128,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t3.png": {
+            "frame": {
+                "x": 0,
+                "y": 32,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 32,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t8.png": {
+            "frame": {
+                "x": 32,
+                "y": 32,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 32,
+                "y": 32,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
         }
     },
     "meta": {
         "app": "game",
         "version": "0.1",
-        "image": "",
+        "image": "test1.png",
         "format": "RGBA8888",
         "size": {
             "w": 160,

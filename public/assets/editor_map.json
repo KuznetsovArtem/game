@@ -87,8 +87,8 @@
         "image": "editor_map.png",
         "format": "RGBA8888",
         "size": {
-            "w": 190,
-            "h": 190
+            "w": 160,
+            "h": 160
         },
         "scale": 1
     }

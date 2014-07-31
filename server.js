@@ -105,23 +105,37 @@ app.post('/map/load/:name?', function(req, res) {
 });
 
 // save map
-app.post('/map/:name?', function(req, res) {
+app.post('/map/save/:name?', function(req, res) {
 
-    var fileName = req.param('name'); // TODO: check file
+    var fileName = req.param('name') + '.json'; // TODO: check file
 
-    fs.writeFile(config.editor.savedMapsDir + fileName + '.json', JSON.stringify(req.body.map, null, 4), function(err) {
+    fs.writeFile(config.editor.savedMapsDir + fileName, JSON.stringify(req.body.map, null, 4), function(err) {
         if(err) throw  err
         console.log("map saved to " + fileName);
     })
-    fs.writeFile(config.editor.savedSheetsDir + fileName + '.json', JSON.stringify(req.body.frames, null, 4), function(err) {
+    fs.writeFile(config.editor.savedSheetsDir + fileName, JSON.stringify(req.body.frames, null, 4), function(err) {
         if (err) throw  err
         console.log("texture spriteSheet saved to " + fileName);
     })
-    fs.writeFile(config.editor.savedMapConfsDir + fileName + '.json', JSON.stringify(req.body.config, null, 2), function(err) {
+    fs.writeFile(config.editor.savedMapConfsDir + fileName, JSON.stringify(req.body.config, null, 2), function(err) {
         if(err) throw  err
         console.log("map config saved to " + fileName);
     })
     res.send('saved');
+});
+
+app.post('/map/saveimage/:name?', function(req, res) {
+    var fileName = req.param('name') + '.png'; // TODO: check file
+    var base64Data = req.body.img.replace(/^data:image\/png;base64,/, "");
+    binaryData = new Buffer(base64Data, 'base64').toString('binary');
+
+//    fs.writeFile(config.editor.savedSheetsDir + fileName, base64Data, 'base64', function(err) {
+    fs.writeFile(config.editor.savedSheetsDir + fileName, binaryData, 'binary', function(err) {
+        if(err) throw err;
+        console.log('Img saved to ' + fileName);
+        console.log(req.body);
+        res.send('Image saved');
+    });
 });
 
 var server = app.listen(config.appPort, function() {
