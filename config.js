@@ -7,7 +7,8 @@ var config = {
     editor : {
         tilesDir : __dirname + '/public/editor/tiles/',
         savedMapsDir: __dirname + '/editor/maps/',
-        savedSheetsDir: __dirname + '/editor/sheets/'
+        savedSheetsDir: __dirname + '/editor/sheets/',
+        savedMapConfsDir: __dirname + '/editor/configs/'
     }
 
 }

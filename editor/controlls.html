@@ -1,27 +1,41 @@
 <!--Tiles-->
-<div class="panel-group" id="tiles-folders">
-    {% for name, folder in local.tiles %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#tiles-folders" href="#folder-{{ loop.key }}">
-                    {{ loop.key + "[" + name + "]" }}
-                </a>
-            </h4>
-        </div>
-        <div id="folder-{{ loop.key }}" class="panel-collapse collapse "><!-- in -->
-            <div class="panel-body">
-                {% for tile in folder %}
-                <!--TODO: return normal img src-->
-                <img src="{{'/' + local.tilesDir + name + '/' + tile}}" class="img-thumbnail"
-                     onclick=brush.set("{{ '/' + local.tilesDir + name + '/' + tile }}"); height="32" width="32" alt=""/>
-                {% endfor %}
+<div class="panel panel-default">
+    <div class="panel-heading">Tiles</div>
+    <div class="panel-body">
+
+        <div class="panel-group" id="tiles-folders">
+            {% for name, folder in local.tiles %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#tiles-folders" href="#folder-{{ loop.key }}">
+                            {{ loop.key + "[" + name + "]" }}
+                        </a>
+                    </h4>
+                </div>
+                <div id="folder-{{ loop.key }}" class="panel-collapse collapse "><!-- in -->
+                    <div class="panel-body">
+                        {% for tile in folder %}
+                        <!--TODO: return normal img src-->
+                        <img src="{{'/' + local.tilesDir + name + '/' + tile}}" class="img-thumbnail"
+                             onclick=brush.set("{{ '/' + local.tilesDir + name + '/' + tile }}"); height="32" width="32" alt=""/>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
+
     </div>
-    {% endfor %}
 </div>
 
+
+<div class="panel panel-default">
+    <div class="panel-heading">Decor</div>
+    <div class="panel-body">
+
+    </div>
+</div>
 <!--controls-->
 <!-- Standard button -->
 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#new-map-conf">New</button>

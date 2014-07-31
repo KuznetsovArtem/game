@@ -1,9 +1,9 @@
 /**
  * Created by askuznetsov on 7/22/2014.
  */
-var mapObject;
+var mapObject, mapCanvas, sheetCanvas; // TODO change appendChild for cnavases
 
-var constuct =  function(map) {
+var constuct =  function(map, load) {
 
     // configs
     var conf = {
@@ -17,17 +17,21 @@ var constuct =  function(map) {
                 W: 32,
                 H: 32
             }
+        },
+        control : {
+            mapMoveSpeed: 2.5
         }
+
     };
     // Map and spriteSheet
     var mapStage = new PIXI.Stage('', true); // interactive
     var spriteStage = new PIXI.Stage('', true);
 
     var renderer = PIXI.autoDetectRenderer(conf.W, conf.H, null, true);
-    document.getElementById('map-editor').appendChild(renderer.view);
+    (mapCanvas||document.getElementById('map-editor')).appendChild(renderer.view);
 
     var sheetRenderer = PIXI.autoDetectRenderer(conf.sMap.W, conf.sMap.W, null, true);
-    document.getElementById('sprite-sheet').appendChild(sheetRenderer.view);
+    (sheetCanvas||document.getElementById('sprite-sheet')).appendChild(sheetRenderer.view);
 
     // Terrain itit
     var mapTerrainLayer = new PIXI.DisplayObjectContainer();
@@ -39,41 +43,12 @@ var constuct =  function(map) {
     // Grid for clearance
     mapFx.drawGrid(map.terrain.length, map.terrain[0].length, map, mapTerrainLayer);
 
-/* // Tile test
-    var texture = PIXI.Texture.fromImage("/editor/tiles/etst/t1.png");
-    // create a new Sprite using the texture
-    var tile = new PIXI.Sprite(texture);
-    // center the sprites anchor point
-    tile.anchor.x = 0.5;
-    tile.anchor.y = 0.5;
-    // move the sprite to the center of the screen
-    tile.position.x = 200;
-    tile.position.y = 150;
-    tile.interactive = true
-    tile.mousedown = function(data) {
-        console.log('click', data)
-        // dragging
-//        tile.mousemove = function(e) {
-//            console.log('move', e)
-//            tile.position.x = e.originalEvent.x - 320;
-//            tile.position.y = e.originalEvent.y - 40;
-//        }
-        tile.mouseup = function() {
-            tile.mousemove = function() {}
-        }
-    }
-    mapStage.addChild(tile);
-*/
-
     /**
      * map keybord movement
      */
     function moveMap(obj, direction) {
-        // TODO: now def speed is 0.1 + move to conf
-        var offset = 50;
-        var speed = 2;
-        obj.position.x += Math.cos(direction) * speed;
-        obj.position.y += Math.sin(direction) * speed;
+        obj.position.x += Math.cos(direction) * conf.control.mapMoveSpeed;
+        obj.position.y += Math.sin(direction) * conf.control.mapMoveSpeed;
     }
 
     var stageMove = {
@@ -102,14 +77,17 @@ var constuct =  function(map) {
     requestAnimFrame(animate);
 
     function animate() {
-        requestAnimFrame(animate);
-
         kd.tick();
         renderer.render(mapStage);
         sheetRenderer.render(spriteStage);
+
+        requestAnimFrame(animate);
     }
 
     mapObject = map;
+    if(load && typeof load === 'function') {
+        load();
+    }
 }
 
 /**
@@ -186,9 +164,7 @@ var mapFx = (function() {
                     sprite.anchor.y = 0;
                     sprite.interactive = true
                     sprite.mousedown = function(e) {
-//                        console.log(this, "clicked on sprite", e);
                         brush.editTile(this.self.index);
-//                        console.log("clicked on sprite", e);
                         var brushTexture = brush.get()||"/editor/tiles/etst/t1.png"
                         this.texture = PIXI.Texture.fromImage(brushTexture);
                     }
@@ -197,7 +173,6 @@ var mapFx = (function() {
                             brush.editTile(this.self.index);
                             var brushTexture = brush.get()||"/editor/tiles/etst/t1.png"
                             this.texture = PIXI.Texture.fromImage(brushTexture);
-                            console.log("drawing..");
                         }
                     }
                     mapLayer.addChild(sprite);
@@ -239,19 +214,16 @@ function loadMap(map) {
     $.ajax({
         url: '/map/load/' + map,
         type: 'POST',
-//        data: JSON.stringify(data),
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         async: false,
         success: function(data) {
+            constuct(data.map, function() {
+                console.log('callb from construct');
+                // TODO: render map & sprite canvas
+            });
             console.log(data);
         }
-    })
-
-    createMap({
-        name: 'test_map',
-        x: 20,
-        y: 20
     })
 }
 
@@ -262,12 +234,15 @@ function saveMap() {
     console.log('try to save');
 
     mapObject.textures = brush.getTextures();
-
-//    return console.log(mapObject);
+    var saveConfig = { // TODO: real urls for imgs
+        name: mapObject.name,
+        test : [1,2,3,4,5,6,7,8,9]
+    }
 
     var data = {
         map: mapObject,
-        frames : mapFrames.getFrames()
+        frames : mapFrames.getFrames(),
+        config : saveConfig
     }
 
     $.ajax({
@@ -388,7 +363,6 @@ var mapFrames = (function() {
         getFrames: generateFrameFile
     }
 })()
-
 
 // for testing purposes
 //createMap({

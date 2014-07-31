@@ -89,6 +89,7 @@ app.get('/editor', function(req, res) {
     });
 });
 
+// load a map
 app.post('/map/load/:name?', function(req, res) {
     var mapName = req.param('name');
 
@@ -101,43 +102,24 @@ app.post('/map/load/:name?', function(req, res) {
             sheet: JSON.parse(sheets)
         })
     })
-
-//    res.send({
-//        name: mapName
-//    })
 });
 
+// save map
 app.post('/map/:name?', function(req, res) {
-
-    var map = req.body.map;
-    var frames = req.body.frames;
 
     var fileName = req.param('name'); // TODO: check file
 
-    // TODO: move to load logic
-//    if(fs.existsSync(editorDir + fileName)) {
-//        return fs.readFile(editorDir + fileName, function(err, data) {
-//            if(err) {
-//                throw err;
-//            }
-//            console.log(data);
-//            res.send(data);
-//        });
-//    }
-
-    fs.writeFile(config.editor.savedMapsDir + fileName + '.json', JSON.stringify(map, null, 4), function(err) {
-        if(err) {
-            console.log(err)
-        } else {
-            console.log("map saved to " + fileName);
-        }
+    fs.writeFile(config.editor.savedMapsDir + fileName + '.json', JSON.stringify(req.body.map, null, 4), function(err) {
+        if(err) throw  err
+        console.log("map saved to " + fileName);
     })
-    fs.writeFile(config.editor.savedSheetsDir + fileName + '.json', JSON.stringify(frames, null, 4), function(err) {
-        if(err) {
-            console.log(err)
-        } else {
-            console.log("texture spriteSheet saved to " + fileName);
-        }
+    fs.writeFile(config.editor.savedSheetsDir + fileName + '.json', JSON.stringify(req.body.frames, null, 4), function(err) {
+        if (err) throw  err
+        console.log("texture spriteSheet saved to " + fileName);
+    })
+    fs.writeFile(config.editor.savedMapConfsDir + fileName + '.json', JSON.stringify(req.body.config, null, 2), function(err) {
+        if(err) throw  err
+        console.log("map config saved to " + fileName);
     })
     res.send('saved');
 });
