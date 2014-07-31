@@ -1,6 +1,6 @@
 {
     "frames": {
-        "t6.png": {
+        "t1.png": {
             "frame": {
                 "x": 0,
                 "y": 0,
@@ -11,6 +11,66 @@
             "trimmed": true,
             "spriteSourceSize": {
                 "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t10.png": {
+            "frame": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t6.png": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 160,
+                "h": 160
+            }
+        },
+        "t7.png": {
+            "frame": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 96,
                 "y": 0,
                 "w": 32,
                 "h": 32
@@ -22,7 +82,7 @@
         },
         "t2.png": {
             "frame": {
-                "x": 32,
+                "x": 128,
                 "y": 0,
                 "w": 32,
                 "h": 32
@@ -30,7 +90,7 @@
             "rotated": false,
             "trimmed": true,
             "spriteSourceSize": {
-                "x": 32,
+                "x": 128,
                 "y": 0,
                 "w": 32,
                 "h": 32
@@ -40,18 +100,18 @@
                 "h": 160
             }
         },
-        "t9.png": {
+        "t3.png": {
             "frame": {
-                "x": 64,
-                "y": 0,
+                "x": 0,
+                "y": 32,
                 "w": 32,
                 "h": 32
             },
             "rotated": false,
             "trimmed": true,
             "spriteSourceSize": {
-                "x": 64,
-                "y": 0,
+                "x": 0,
+                "y": 32,
                 "w": 32,
                 "h": 32
             },
@@ -62,16 +122,16 @@
         },
         "t8.png": {
             "frame": {
-                "x": 96,
-                "y": 0,
+                "x": 32,
+                "y": 32,
                 "w": 32,
                 "h": 32
             },
             "rotated": false,
             "trimmed": true,
             "spriteSourceSize": {
-                "x": 96,
-                "y": 0,
+                "x": 32,
+                "y": 32,
                 "w": 32,
                 "h": 32
             },

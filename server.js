@@ -129,7 +129,6 @@ app.post('/map/saveimage/:name?', function(req, res) {
     var base64Data = req.body.img.replace(/^data:image\/png;base64,/, "");
     binaryData = new Buffer(base64Data, 'base64').toString('binary');
 
-//    fs.writeFile(config.editor.savedSheetsDir + fileName, base64Data, 'base64', function(err) {
     fs.writeFile(config.editor.savedSheetsDir + fileName, binaryData, 'binary', function(err) {
         if(err) throw err;
         console.log('Img saved to ' + fileName);
