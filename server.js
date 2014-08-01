@@ -94,12 +94,14 @@ app.post('/map/load/:name?', function(req, res) {
     var mapName = req.param('name');
 
     var sheets = fs.readFileSync(config.editor.savedSheetsDir + mapName, 'utf8');
+    var sheetUrls = fs.readFileSync(config.editor.savedMapConfsDir + mapName, 'utf8');
 
     fs.readFile(config.editor.savedMapsDir + mapName, 'utf8', function(err, mapData) {
         if (err) throw err;
         res.send({
             map: JSON.parse(mapData),
-            sheet: JSON.parse(sheets)
+            sheet: JSON.parse(sheets),
+            sheetUrls: JSON.parse(sheetUrls)
         })
     })
 });
@@ -132,7 +134,6 @@ app.post('/map/saveimage/:name?', function(req, res) {
     fs.writeFile(config.editor.savedSheetsDir + fileName, binaryData, 'binary', function(err) {
         if(err) throw err;
         console.log('Img saved to ' + fileName);
-        console.log(req.body);
         res.send('Image saved');
     });
 });

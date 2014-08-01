@@ -107,7 +107,6 @@ var constuct =  function(map, load) {
             async: true,
             success: function(msg) {
                 console.log(msg);
-                console.log(sheetRenderer.view.toDataURL("image/png"));
             }
         });
     }, false);
@@ -242,8 +241,18 @@ function loadMap(map) {
         async: false,
         success: function(data) {
             constuct(data.map, function() {
-                console.log('callb from construct');
-                // TODO: render map & sprite canvas
+                console.log('callb from construct', data.map.textures);
+                for(var n in data.map.textures) {
+                    brush.set(data.sheetUrls.urls[data.map.textures[n]]);
+                }
+
+                for (var i = 0; i < data.map.terrain.length; i++) {
+                    for (var j = 0; j < data.map.terrain[i].length; j++) {
+                        // TODO: dram old map
+//                        brush.set(data.sheetUrls.urls[data.map.textures[data.map.terrain[i][j]]])
+                    }
+                }
+
             });
             console.log(data);
         }
@@ -263,7 +272,6 @@ function saveMap() {
     }
 
     document.dispatchEvent(editorEvent);
-    return ;
     var data = {
         map: mapObject,
         frames : mapFrames.getFrames(),
@@ -287,6 +295,7 @@ function saveMap() {
 var brush = (function() {
     var canvas, config, currentBrush,
         textures = [],
+        frames = {},
         texturesUrls = {};
 
     function addSprite(imgUrl) {
@@ -324,6 +333,7 @@ var brush = (function() {
             currentBrush = pic;
             if(!frames[pic] ) {
                 addSprite(pic);
+                frames[pic] = true;
             }
         },
         get : function() {
@@ -378,7 +388,7 @@ var mapFrames = (function() {
                     h: conf.sMap.tile.H
                 },
                 rotated: false,
-                trimmed: true,
+                trimmed: false,
                 "spriteSourceSize": {
                     x: position.x,
                     y: position.y,
